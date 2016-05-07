@@ -34,8 +34,8 @@ var app = {
         blePeripheral.onBluetoothStateChange(app.onBluetoothStateChange);
 
         // 2 different ways to create the service: API calls or JSON
-        app.createService();
-        //app.createServiceJSON();
+        //app.createService();
+        app.createServiceJSON();
 
     },
     createService: function() {
@@ -51,17 +51,12 @@ var app = {
             blePeripheral.addCharacteristic(SERVICE_UUID, TX_UUID, property.READ | property.NOTIFY, permission.READABLE),
             blePeripheral.publishService(SERVICE_UUID),
             blePeripheral.startAdvertising(SERVICE_UUID, 'UART')
-        ]).then( app.onError);
-
-        blePeripheral.onWriteRequest(app.didReceiveWriteRequest);
-
-        Promise.all([
-            blePeripheral.createServiceFromJSON(uartService),
-            blePeripheral.startAdvertising(uartService.uuid, 'UART')
         ]).then(
             function() { console.log ('Created UART Service'); },
             app.onError
         );
+
+        blePeripheral.onWriteRequest(app.didReceiveWriteRequest);
     },
     createServiceJSON: function() {
         // https://learn.adafruit.com/introducing-the-adafruit-bluefruit-le-uart-friend/uart-service
