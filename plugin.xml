@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin
+    xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="cordova-plugin-ble-peripheral"
+    version="0.0.1">
+
+    <name>BLE Peripheral</name>
+    <description>Bluetooth Low Energy (BLE) Peripheral Plugin</description>
+    <license>Apache 2.0</license>
+    <keywords>bluetooth, BLE, bluetooth low energy, peripheral</keywords>
+
+    <repo>https://github.com/don/cordova-plugin-ble-peripheral.git</repo>
+    <issue>https://github.com/don/cordova-plugin-ble-peripheral/issues</issue>
+
+    <js-module src="www/blePeripheral.js" name="blePeripheral">
+        <clobbers target="blePeripheral" />
+    </js-module>
+
+    <platform name="ios">
+
+        <config-file target="config.xml" parent="/widget">
+            <feature name="BLEPeripheral">
+                <param name="ios-package" value="BLEPeripheralPlugin" onload="true"/>
+            </feature>
+        </config-file>
+
+        <header-file src="src/ios/BLEPeripheralPlugin.h" target-dir="BLEPeripheralPlugin" />
+        <source-file src="src/ios/BLEPeripheralPlugin.m" target-dir="BLEPeripheralPlugin" />
+
+        <!-- frameworks -->
+        <framework src="CoreBluetooth.framework" />
+
+    </platform>
+
+</plugin>
