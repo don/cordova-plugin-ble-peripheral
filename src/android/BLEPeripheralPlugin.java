@@ -37,6 +37,8 @@ import android.content.IntentFilter;
 
 import android.os.ParcelUuid;
 import android.provider.Settings;
+import android.util.Log;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaArgs;
 import org.apache.cordova.CordovaPlugin;
@@ -135,6 +137,11 @@ public class BLEPeripheralPlugin extends CordovaPlugin {
         } else if (action.equals(SET_CHARACTERISTIC_VALUE_CHANGED_LISTENER)) {
 
             writeRequestCallback = callbackContext;
+
+            // TODO is this necessary?
+            PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
+            result.setKeepCallback(true);
+            callbackContext.sendPluginResult(result);
 
         } else if (action.equals(SET_CHARACTERISTIC_VALUE)) {
 
@@ -260,7 +267,7 @@ public class BLEPeripheralPlugin extends CordovaPlugin {
             service.addCharacteristic(characteristic);
         }
 
-        gattServer = bluetoothManager.openGattServer(cordova.getActivity(), bluetoothGattServerCallback);
+        gattServer = bluetoothManager.openGattServer(cordova.getActivity().getApplicationContext(), bluetoothGattServerCallback);
         gattServer.addService(service);
 
     }
@@ -274,12 +281,12 @@ public class BLEPeripheralPlugin extends CordovaPlugin {
 
         BluetoothGattCharacteristic characteristic = new BluetoothGattCharacteristic(uuid, properties, permissions);
 
-        if (descriptorArray.length() > 0) {
-            for (int j = 0; j < descriptorArray.length(); j++) {
-                BluetoothGattDescriptor descriptor = descriptorFromJSON(descriptorArray.getJSONObject(j));
-                characteristic.addDescriptor(descriptor);
-            }
-        }
+//        if (descriptorArray.length() > 0) {
+//            for (int j = 0; j < descriptorArray.length(); j++) {
+//                BluetoothGattDescriptor descriptor = descriptorFromJSON(descriptorArray.getJSONObject(j));
+//                characteristic.addDescriptor(descriptor);
+//            }
+//        }
 
         return characteristic;
     }
@@ -287,7 +294,8 @@ public class BLEPeripheralPlugin extends CordovaPlugin {
     private BluetoothGattDescriptor descriptorFromJSON(JSONObject json) throws JSONException {
         UUID uuid = uuidFromString(json.getString("uuid"));
         String value = json.getString("value"); // TODO getBytes()
-        int permissions = json.getInt("permissions");
+        //int permissions = json.getInt("permissions"); // TODO update JSON
+        int permissions = BluetoothGattDescriptor.PERMISSION_READ | BluetoothGattDescriptor.PERMISSION_WRITE;
         BluetoothGattDescriptor descriptor = new BluetoothGattDescriptor(uuid, permissions);
         descriptor.setValue(value.getBytes());
         return descriptor;
@@ -399,18 +407,23 @@ public class BLEPeripheralPlugin extends CordovaPlugin {
 
         @Override
         public void onCharacteristicReadRequest(BluetoothDevice device, int requestId, int offset, BluetoothGattCharacteristic characteristic) {
+            super.onCharacteristicReadRequest(device, requestId, offset, characteristic);
+            Log.i(TAG, "onCharacteristicReadRequest "+characteristic.getUuid().toString());
 
-            // TODO this should Just Work by default
-//            gattServer.sendResponse(device,
-//                    requestId,
-//                    BluetoothGatt.GATT_SUCCESS,
-//                    0,
-//                    characteristic.getValue());
+            byte[] value = characteristic.getValue();
+
+            gattServer.sendResponse(device,
+                    requestId,
+                    BluetoothGatt.GATT_SUCCESS,
+                    0,
+                    value);
 
         }
 
         @Override
         public void onCharacteristicWriteRequest(BluetoothDevice device, int requestId, BluetoothGattCharacteristic characteristic, boolean preparedWrite, boolean responseNeeded, int offset, byte[] value) {
+            super.onCharacteristicWriteRequest(device, requestId, characteristic, preparedWrite, responseNeeded, offset, value);
+            Log.i(TAG, "onCharacteristicWriteRequest "+characteristic.getUuid().toString());
 
             // TODO does this work, or do I need to look it up from gatt server and set?
             characteristic.setValue(value);
