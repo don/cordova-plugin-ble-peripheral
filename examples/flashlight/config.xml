@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.example.ble.flashlight" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Flashlight</name>
+    <description>
+        A sample Apache Cordova application with Bluetooth LE peripheral that controls the camera flash.
+    </description>
+    <author href="https://github.com/don">
+        Don Coleman
+    </author>
+    <content src="index.html" />
+    <plugin name="cordova-plugin-whitelist" spec="1" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+    </platform>
+    <platform name="ios">
+        <config-file parent="UIBackgroundModes" target="*-Info.plist">
+            <array>
+                <string>bluetooth-peripheral</string>
+            </array>
+        </config-file>
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
+    <plugin name="cordova-plugin-ble-peripheral" spec="~0.0.1" />
+    <plugin name="cordova-plugin-flashlight" spec="~3.0.0" />
+    <plugin name="cordova-custom-config" spec="~2.0.0" />
+</widget>
