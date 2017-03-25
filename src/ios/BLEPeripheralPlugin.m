@@ -19,6 +19,13 @@
 #import "BLEPeripheralPlugin.h"
 #import <Cordova/CDV.h>
 
+static NSDictionary *dataToArrayBuffer(NSData* data) {
+    return @{
+             @"CDVType" : @"ArrayBuffer",
+             @"data" :[data base64EncodedStringWithOptions:0]
+             };
+}
+
 @interface BLEPeripheralPlugin() {
     NSDictionary *bluetoothStates;
 }
@@ -377,17 +384,6 @@
 
     return service;
 
-}
-
-#pragma mark - Helper Functions
-
-// Borrowed from Cordova messageFromArrayBuffer since Cordova doesn't handle NSData in NSDictionary
-id dataToArrayBuffer(NSData* data)
-{
-    return @{
-             @"CDVType" : @"ArrayBuffer",
-             @"data" :[data base64EncodedStringWithOptions:0]
-             };
 }
 
 @end
