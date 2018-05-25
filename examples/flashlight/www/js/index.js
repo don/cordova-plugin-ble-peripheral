@@ -60,7 +60,9 @@ var app = {
    },
    didReceiveWriteRequest: function(request) {
        console.log(request);
-       if (request.characteristic === SWITCH_UUID) {
+
+       // Android sends long versions of the UUID
+       if (request.characteristic === SWITCH_UUID || request.characteristic === '0000ff11-0000-1000-8000-00805f9b34fb') {
            var data = new Uint8Array(request.value);
            if (data[0] === 0) {
                window.plugins.flashlight.switchOff();
@@ -68,6 +70,18 @@ var app = {
                window.plugins.flashlight.switchOn();
            }
        }
+
+       // brightness only works on iOS as of Flashlight 3.2.0
+       if (request.characteristic === DIMMER_UUID || request.characteristic === '0000ff12-0000-1000-8000-00805f9b34fb') {
+            var data = new Uint8Array(request.value);
+            var brightnessByte = data[0];              // 1 byte value 0x00 to 0xFF
+            var brightness = brightnessByte / 255.0    // convert to value between 0 and 1.0
+            window.plugins.flashlight.switchOn(
+                function() { console.log('Set brightness to', brightness) },
+                function() { console.log('Set brightness failed')},
+                { intensity: brightness }
+            );
+        }
    },
    onBluetoothStateChange: function(state) {
        console.log('Bluetooth State is', state);
