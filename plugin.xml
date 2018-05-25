@@ -33,4 +33,21 @@
 
     </platform>
 
+        <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/widget">
+            <feature name="BLEPeripheral">
+                <param name="android-package" value="com.megster.cordova.ble.peripheral.BLEPeripheralPlugin"/>
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.BLUETOOTH"/>
+            <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+        </config-file>
+
+        <source-file src="src/android/BLEPeripheralPlugin.java" target-dir="src/com/megster/cordova/ble/peripheral"/>
+        <source-file src="src/android/UUIDHelper.java" target-dir="src/com/megster/cordova/ble/peripheral"/>
+
+    </platform>
+
 </plugin>
