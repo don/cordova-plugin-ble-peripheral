@@ -128,13 +128,6 @@ module.exports = {
 
     permissions: {
         READABLE: 0x01,
-        WRITEABLE: 0x02,
-        READ_ENCRYPTION_REQUIRED: 0x04,
-        WRITE_ENCRYPTION_REQUIRED: 0x08
-    },
-
-    permissions: {
-        READABLE: 0x01,
         WRITEABLE: cordova.platformId === 'ios' ? 0x02 : 0x10,
         READ_ENCRYPTION_REQUIRED: cordova.platformId === 'ios' ? 0x04 : 0x02,
         WRITE_ENCRYPTION_REQUIRED: cordova.platformId === 'ios' ? 0x08: 0x20
