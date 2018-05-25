@@ -94,6 +94,28 @@ function registerBluetoothStateChangeCallback() {
 }
 registerBluetoothStateChangeCallback();
 
+/* 
+Characteristic premissions are not consistent across platforms. This will need to be reconciled.
+Maybe permissions should be optional and default to read/write based on the properties.
+
+// iOS permissions CBCharacteristic.h
+    CBAttributePermissionsReadable					= 0x01,
+    CBAttributePermissionsWriteable					= 0x02,
+    CBAttributePermissionsReadEncryptionRequired	= 0x04,
+    CBAttributePermissionsWriteEncryptionRequired	= 0x08
+
+// Android permissions BluetoothGattCharacteristic.java
+
+    public static final int PERMISSION_READ = 0x01;
+    public static final int PERMISSION_READ_ENCRYPTED = 0x02;
+    public static final int PERMISSION_READ_ENCRYPTED_MITM = 0x04;
+    public static final int PERMISSION_WRITE = 0x10;
+    public static final int PERMISSION_WRITE_ENCRYPTED = 0x20;
+    public static final int PERMISSION_WRITE_ENCRYPTED_MITM = 0x40;
+    public static final int PERMISSION_WRITE_SIGNED = 0x80;
+    public static final int PERMISSION_WRITE_SIGNED_MITM = 0x100;
+*/
+
 module.exports = {
 
     properties : {
@@ -109,6 +131,13 @@ module.exports = {
         WRITEABLE: 0x02,
         READ_ENCRYPTION_REQUIRED: 0x04,
         WRITE_ENCRYPTION_REQUIRED: 0x08
+    },
+
+    permissions: {
+        READABLE: 0x01,
+        WRITEABLE: cordova.platformId === 'ios' ? 0x02 : 0x10,
+        READ_ENCRYPTION_REQUIRED: cordova.platformId === 'ios' ? 0x04 : 0x02,
+        WRITE_ENCRYPTION_REQUIRED: cordova.platformId === 'ios' ? 0x08: 0x20
     },
 
     createService: function(uuid) {
