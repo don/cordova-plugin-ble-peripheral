@@ -1,11 +1,12 @@
 {
   "name": "cordova-plugin-ble-peripheral",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Bluetooth Low Energy (BLE) Peripheral Plugin",
   "cordova": {
     "id": "cordova-plugin-ble-peripheral",
     "platforms": [
-      "ios"
+      "ios",
+      "android"
     ]
   },
   "repository": {

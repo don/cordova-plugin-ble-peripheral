@@ -9,6 +9,7 @@ See the [examples](https://github.com/don/cordova-plugin-ble-peripheral/tree/mas
 ## Supported Platforms
 
 * iOS
+* Android
 
 # Installing
 
