@@ -24,5 +24,4 @@
         <allow-intent href="itms-apps:*" />
     </platform>
     <plugin name="cordova-plugin-ble-peripheral" />
-    <plugin name="cordova-plugin-console" spec="~1.0.3" />
 </widget>
