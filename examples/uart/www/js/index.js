@@ -48,7 +48,7 @@ var app = {
         Promise.all([
             blePeripheral.createService(SERVICE_UUID),
             blePeripheral.addCharacteristic(SERVICE_UUID, TX_UUID, property.WRITE, permission.WRITEABLE),
-            blePeripheral.addCharacteristic(SERVICE_UUID, TX_UUID, property.READ | property.NOTIFY, permission.READABLE),
+            blePeripheral.addCharacteristic(SERVICE_UUID, RX_UUID, property.READ | property.NOTIFY, permission.READABLE),
             blePeripheral.publishService(SERVICE_UUID),
             blePeripheral.startAdvertising(SERVICE_UUID, 'UART')
         ]).then(
